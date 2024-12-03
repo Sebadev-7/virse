@@ -176,7 +176,7 @@ function App() {
             </div>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-0">
             {playingVideo && (
               <div className="w-full aspect-video bg-black mobile-horizontal-video">
                 {/* Ajuste de altura para la versión móvil horizontal */}
