@@ -6,7 +6,7 @@
     .video-container {
       position: relative;
       width: 90vw; /* 90% del ancho de la pantalla */
-      height: calc(90vw * 9 / 16); /* Mantiene la relación 16:9 */
+      height: 50vh; /* Mantiene la relación 16:9 */
       margin: 0 auto; /* Centra el reproductor en la pantalla */
       background-color: black; /* Fondo negro si el video no se carga */
       border-radius: 10px; /* Borde redondeado opcional */
