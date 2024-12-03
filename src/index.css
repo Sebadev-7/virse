@@ -4,7 +4,7 @@
 /* Ajuste de altura para la versión móvil horizontal */
 @media (max-width: 768px) and (orientation: landscape) {
     .mobile-horizontal-video {
-      height: 50vh; /* Ajusta este valor según sea necesario */
+      height: 90vh; /* Ajusta este valor según sea necesario */
     }
   }
   
