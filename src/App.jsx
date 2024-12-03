@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import ReactPlayer from "react-player";
-import './index.css';
 import {
   Play,
   Pause,
@@ -24,7 +23,6 @@ function App() {
   const [playerRef, setPlayerRef] = useState(null);
   const [copied, setCopied] = useState(false);
   const [showControls, setShowControls] = useState(true);
-  const [showIcons, setShowIcons] = useState(true);
 
   useEffect(() => {
     socket.on("play_video", (url) => {
@@ -123,38 +121,30 @@ function App() {
     setShowControls(!showControls);
   };
 
-  const toggleIcons = () => {
-    setShowIcons(!showIcons);
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#334155] flex flex-col">
       {/* Mobile Header */}
       {joinedRoom && showControls && (
         <header className={`absolute top-0 left-0 right-0 z-10 bg-gradient-to-r from-[#1E293B]/90 to-[#0F172A]/90 backdrop-blur-sm p-3 flex justify-between items-center`}>
-          {showIcons && (
-            <div className="text-xs text-[#94A3B8] font-medium flex items-center">
-              <Tv className="w-4 h-4 mr-2 text-[#38BDF8]" />
-              Dodi
-            </div>
-          )}
-          {showIcons && (
-            <div className="flex items-center space-x-2">
-              <span className="text-xs text-[#E2E8F0] bg-[#1E293B]/50 px-2 py-1 rounded-full">
-                Sala: {roomCode}
-              </span>
-              <button
-                onClick={copyRoomCode}
-                className="text-[#38BDF8] hover:text-[#7DD3FC] transition-colors"
-              >
-                {copied ? (
-                  <span className="text-xs text-[#10B981]">Copiado!</span>
-                ) : (
-                  <Copy className="w-4 h-4" />
-                )}
-              </button>
-            </div>
-          )}
+          <div className="text-xs text-[#94A3B8] font-medium flex items-center">
+            <Tv className="w-4 h-4 mr-2 text-[#38BDF8]" />
+            Dodi
+          </div>
+          <div className="flex items-center space-x-2">
+            <span className="text-xs text-[#E2E8F0] bg-[#1E293B]/50 px-2 py-1 rounded-full">
+              Sala: {roomCode}
+            </span>
+            <button
+              onClick={copyRoomCode}
+              className="text-[#38BDF8] hover:text-[#7DD3FC] transition-colors"
+            >
+              {copied ? (
+                <span className="text-xs text-[#10B981]">Copiado!</span>
+              ) : (
+                <Copy className="w-4 h-4" />
+              )}
+            </button>
+          </div>
         </header>
       )}
 
@@ -256,12 +246,6 @@ function App() {
             className="bg-[#1E293B]/50 p-2 rounded-full hover:bg-[#1E293B]/70 transition"
           >
             <Tv className="w-6 h-6 text-[#38BDF8]" />
-          </button>
-          <button
-            onClick={toggleIcons}
-            className="bg-[#1E293B]/50 p-2 rounded-full hover:bg-[#1E293B]/70 transition"
-          >
-            <Copy className="w-6 h-6 text-[#38BDF8]" />
           </button>
         </div>
       )}
