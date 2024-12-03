@@ -186,7 +186,8 @@ function App() {
         ) : (
           <div className="space-y-4">
             {playingVideo && (
-              <div className="w-full aspect-video bg-black">
+              <div className="video-container">
+                {/* Ajuste de altura para la versión móvil horizontal */}
                 <ReactPlayer
                   ref={(player) => setPlayerRef(player)}
                   url={playingVideo}
