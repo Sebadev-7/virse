@@ -5,11 +5,19 @@ const cors = require("cors");
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: "*" } });
+const io = new Server(server, {
+  cors: {
+    origin: ["https://virse.vercel.app", "http://localhost:5173"], // Permitir solicitudes solo desde estos orígenes
+    methods: ["GET", "POST"], // Permitir métodos GET y POST
+  },
+});
 
 let rooms = {}; // Para almacenar las salas y sus hosts
 
-app.use(cors());
+app.use(cors({
+  origin: ["https://virse.vercel.app", "http://localhost:5173"], // Permitir solicitudes solo desde estos orígenes
+  methods: ["GET", "POST"], // Permitir métodos GET y POST
+}));
 app.use(express.json());
 
 // Evento de conexión de Socket.IO
@@ -75,6 +83,8 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(3000, () => {
-  console.log("Servidor corriendo en http://localhost:3000");
+// Escuchar en el puerto proporcionado por Render
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
