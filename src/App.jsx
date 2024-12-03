@@ -192,8 +192,8 @@ function App() {
                   ref={(player) => setPlayerRef(player)}
                   url={playingVideo}
                   playing={isPlaying}
-                  width="90%"
-                  height="90%"
+                  width="100%"
+                  height="85%"
                   controls={true} // Habilitar los controles de YouTube
                 />
               </div>
