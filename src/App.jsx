@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 
 // Asegúrate de que esta URL apunte a tu servidor desplegado en Render
-const socket = io("https://your-render-deployed-server-url.com");
+const socket = io("https://virse.onrender.com");
 
 function App() {
   const [roomCode, setRoomCode] = useState("");
