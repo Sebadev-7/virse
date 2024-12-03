@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import ReactPlayer from "react-player";
+import './index.css';
 import {
   Play,
   Pause,

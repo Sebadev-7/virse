@@ -2,9 +2,49 @@
 @tailwind components;
 @tailwind utilities;
 /* Ajuste de altura para la versión móvil horizontal */
+/* index.css */
+
+/* Estilos generales */
+.min-h-screen {
+  min-height: 100vh;
+}
+
+.bg-gradient-to-br {
+  background: linear-gradient(to bottom right, #0F172A, #1E293B, #334155);
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.pt-12 {
+  padding-top: 3rem;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.space-y-4 > *:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.bg-black {
+  background-color: #000;
+}
+
+.aspect-video {
+  aspect-ratio: 16 / 9;
+}
+
+/* Estilos específicos para dispositivos móviles en orientación horizontal */
 @media (max-width: 768px) and (orientation: landscape) {
-    .mobile-horizontal-video {
-      height: 320px; /* Ajusta este valor según sea necesario */
-    }
+  .mobile-horizontal-video {
+    max-height: 50vh; /* Ajusta este valor según sea necesario */
   }
-  
+}
