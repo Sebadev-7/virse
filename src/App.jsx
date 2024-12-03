@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 
 // Asegúrate de que esta URL apunte a tu servidor desplegado en Render
-const socket = io("https://virse.onrender.com");
+const socket = io("https://your-render-deployed-server-url.com");
 
 function App() {
   const [roomCode, setRoomCode] = useState("");
@@ -186,7 +186,7 @@ function App() {
         ) : (
           <div className="space-y-4">
             {playingVideo && (
-              <div className="video-container">
+              <div className="w-full aspect-video bg-black mobile-horizontal-video">
                 {/* Ajuste de altura para la versión móvil horizontal */}
                 <ReactPlayer
                   ref={(player) => setPlayerRef(player)}
