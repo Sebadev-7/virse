@@ -9,6 +9,7 @@ import {
   Copy,
   Tv
 } from "lucide-react";
+import VideoChat from "./components/VideoChat"; // Importa el componente VideoChat
 
 // Asegúrate de que esta URL apunte a tu servidor desplegado en Render
 const socket = io("https://virse.onrender.com");
@@ -189,6 +190,8 @@ function App() {
                 />
               </div>
             )}
+            {/* VideoChat Component */}
+            <VideoChat isHost={isHost} isPlaying={isPlaying} videoUrl={videoUrl} />
           </div>
         )}
       </main>
