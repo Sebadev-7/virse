@@ -193,7 +193,7 @@ function App() {
                   url={playingVideo}
                   playing={isPlaying}
                   width="90%"
-                  height="100%"
+                  height="90%"
                   controls={true} // Habilitar los controles de YouTube
                 />
               </div>
