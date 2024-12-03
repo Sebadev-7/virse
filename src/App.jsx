@@ -10,7 +10,8 @@ import {
   Tv
 } from "lucide-react";
 
-const socket = io("http://localhost:3000");
+// Asegúrate de que esta URL apunte a tu servidor desplegado en Render
+const socket = io("https://virse.onrender.com");
 
 function App() {
   const [roomCode, setRoomCode] = useState("");
