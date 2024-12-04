@@ -123,10 +123,10 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#334155] flex flex-col">
+    <div className="min-h-screen bg-black flex flex-col">
       {/* Mobile Header */}
       {joinedRoom && showControls && (
-        <header className={`absolute top-0 left-0 right-0 z-10 bg-gradient-to-r from-[#1E293B]/90 to-[#0F172A]/90 backdrop-blur-sm p-3 flex justify-between items-center`}>
+        <header className={`absolute top-0 left-0 right-0 z-10 bg-black backdrop-blur-sm p-3 flex justify-between items-center`}>
           <div className="text-xs text-[#94A3B8] font-medium flex items-center">
             <Tv className="w-4 h-4 mr-2 text-[#38BDF8]" />
             Dodi
@@ -198,7 +198,7 @@ function App() {
 
       {/* Footer Controls */}
       {joinedRoom && showControls && (
-        <footer className={`absolute bottom-0 left-0 right-0 bg-gradient-to-r from-[#1E293B]/90 to-[#0F172A]/90 backdrop-blur-sm p-4`}>
+        <footer className={`absolute bottom-0 left-0 right-0 bg-black backdrop-blur-sm p-4`}>
           {isHost && (
             <div className="px-4 mb-4">
               <input
@@ -210,7 +210,7 @@ function App() {
               />
               <button
                 onClick={playVideo}
-                className="mt-2 w-full bg-gradient-to-r from-[#4338CA] to-[#3730A3] text-white py-3 rounded-lg hover:from-[#5B21B6] hover:to-[#4338CA] transition"
+                className="mt-2 w-full bg-blue-950 text-white py-3 rounded-lg hover:from-[#5B21B6] hover:to-[#4338CA] transition"
               >
                 Reproducir
               </button>
@@ -226,7 +226,7 @@ function App() {
               </button>
               <button
                 onClick={togglePlay}
-                className="bg-gradient-to-r from-[#4338CA] to-[#3730A3] text-white p-3 rounded-full hover:from-[#5B21B6] hover:to-[#4338CA] transition shadow-lg shadow-[#4338CA]/30"
+                className="bg-blue-900 text-white p-3 rounded-full hover:from-[#5B21B6] hover:to-[#4338CA] transition shadow-lg shadow-[#4338CA]/30"
               >
                 {isPlaying ? <Pause size={24} /> : <Play size={24} />}
               </button>

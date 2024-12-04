@@ -179,10 +179,10 @@ const VideoChat = ({ isHost, isPlaying, videoUrl }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-violet-950 p-4">
+    <div className="min-h-screen bg-black p-4">
       <div className="max-w-7xl mx-auto space-y-4">
         {/* Título */}
-        <h1 className="text-xl font-bold text-center text-violet-600 mb-4">
+        <h1 className="text-xl font-bold text-center text-violet-950 mb-4">
           ConectaYa
         </h1>
 
@@ -220,7 +220,7 @@ const VideoChat = ({ isHost, isPlaying, videoUrl }) => {
             />
             <button
               onClick={startCall}
-              className="w-full bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded-xl font-medium transition-all duration-300 shadow-lg hover:shadow-purple-500/25 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-900 text-xs"
+              className="w-full bg-purple-950 hover:bg-purple-500 text-white px-4 py-2 rounded-xl font-medium transition-all duration-300 shadow-lg hover:shadow-purple-500/25 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-900 text-xs"
             >
               Llamar
             </button>
@@ -231,7 +231,7 @@ const VideoChat = ({ isHost, isPlaying, videoUrl }) => {
               onClick={toggleAudio}
               className={`p-2 rounded-full transition-all duration-300 shadow-lg ${
                 isAudioEnabled
-                  ? "bg-purple-600 hover:bg-purple-500 hover:shadow-purple-500/25"
+                  ? "bg-purple-950 hover:bg-purple-500 hover:shadow-purple-500/25"
                   : "bg-red-600 hover:bg-red-500 hover:shadow-red-500/25"
               } text-white focus:ring-2 focus:ring-offset-2 focus:ring-offset-purple-900`}
             >
@@ -242,7 +242,7 @@ const VideoChat = ({ isHost, isPlaying, videoUrl }) => {
               className={`p-2 rounded-full transition-all duration-300 shadow-lg ${
                 isVideoEnabled
                   ? "bg-purple-600 hover:bg-purple-500 hover:shadow-purple-500/25"
-                  : "bg-red-600 hover:bg-red-500 hover:shadow-red-500/25"
+                  : "bg-red-700 hover:bg-red-500 hover:shadow-red-500/25"
               } text-white focus:ring-2 focus:ring-offset-2 focus:ring-offset-purple-900`}
             >
               {isVideoEnabled ? <Video size={16} /> : <VideoOff size={16} />}
