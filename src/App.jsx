@@ -178,7 +178,7 @@ function App() {
         ) : (
           <div className="space-y-0">
             {playingVideo && (
-              <div className="w-full aspect-video bg-black mobile-horizontal-video">
+              <div className="w-full aspect-video bg-black landscape:w-4/5 landscape:h-4/5 landscape:mx-auto">
                 {/* Ajuste de altura para la versión móvil horizontal */}
                 <ReactPlayer
                   ref={(player) => setPlayerRef(player)}
