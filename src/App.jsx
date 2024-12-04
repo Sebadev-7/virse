@@ -243,7 +243,7 @@ function App() {
 
       {/* Mobile Control Points */}
       {joinedRoom && (
-        <div className="fixed right-0 top-1/2 transform -translate-y-1/2 flex flex-col items-center space-y-4">
+        <div className="fixed right-0 top-3/4 transform -translate-y-1/2 flex flex-col items-center space-y-4">
           <button
             onClick={toggleControls}
             className="bg-[#1E293B]/50 p-2 rounded-full hover:bg-[#1E293B]/70 transition"
