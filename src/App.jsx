@@ -29,6 +29,7 @@ function App() {
   const [peerId, setPeerId] = useState("");
   const [remotePeerId, setRemotePeerId] = useState("");
   const [notification, setNotification] = useState("");
+  const [loadingPeerId, setLoadingPeerId] = useState(false);
 
   useEffect(() => {
     socket.on("play_video", (url) => {
@@ -85,6 +86,17 @@ function App() {
       }
     });
 
+    socket.on("peer_id_loading", () => {
+      setLoadingPeerId(true);
+      setNotification("Cargando ID de llamada del host...");
+    });
+
+    socket.on("peer_id_loaded", () => {
+      setLoadingPeerId(false);
+      setNotification("¡Puedes realizar videollamadas!");
+      setTimeout(() => setNotification(""), 2000);
+    });
+
     return () => {
       socket.off("play_video");
       socket.off("pause_video");
@@ -94,6 +106,8 @@ function App() {
       socket.off("peer_id_updated");
       socket.off("new_participant");
       socket.off("call_request");
+      socket.off("peer_id_loading");
+      socket.off("peer_id_loaded");
     };
   }, [playerRef, isHost]);
 
@@ -183,11 +197,22 @@ function App() {
     }
   }, [isHost, peerId]);
 
+  useEffect(() => {
+    if (joinedRoom && !isHost) {
+      socket.emit("peer_id_loading", { roomCode });
+    }
+  }, [joinedRoom, isHost, roomCode]);
+
   return (
     <div className="min-h-screen bg-black flex flex-col">
       {notification && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-lg font-medium z-50">
           {notification}
+        </div>
+      )}
+      {loadingPeerId && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-lg font-medium z-50">
+          Cargando ID de llamada del host...
         </div>
       )}
       {/* Mobile Header */}

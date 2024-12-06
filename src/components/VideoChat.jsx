@@ -308,3 +308,4 @@ const VideoChat = ({ isHost, isPlaying, videoUrl, setPeerId, remotePeerId, initi
 };
 
 export default VideoChat;
+

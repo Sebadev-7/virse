@@ -96,6 +96,16 @@ io.on("connection", (socket) => {
   socket.on("call_request", ({ roomCode, callerId }) => {
     io.to(roomCode).emit("call_request", { callerId });
   });
+
+  // Notificación de carga de PeerID
+  socket.on("peer_id_loading", ({ roomCode }) => {
+    io.to(roomCode).emit("peer_id_loading");
+  });
+
+  // Notificación de PeerID cargado
+  socket.on("peer_id_loaded", ({ roomCode }) => {
+    io.to(roomCode).emit("peer_id_loaded");
+  });
 });
 
 // Escuchar en el puerto proporcionado por Render
