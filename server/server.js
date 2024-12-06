@@ -27,7 +27,7 @@ io.on("connection", (socket) => {
   // Crear sala y asignar como host
   socket.on("create_room", (_, callback) => {
     const roomCode = Math.random().toString(36).substr(2, 6).toUpperCase();
-    rooms[roomCode] = { host: socket.id, peerId: null };
+    rooms[roomCode] = { host: socket.id };
     socket.join(roomCode);
     callback(roomCode);
   });
@@ -36,9 +36,7 @@ io.on("connection", (socket) => {
   socket.on("join_room", (roomCode, callback) => {
     if (rooms[roomCode]) {
       socket.join(roomCode);
-      const peerId = rooms[roomCode].peerId;
-      callback({ success: true, peerId });
-      io.to(roomCode).emit("new_participant", { roomCode, peerId });
+      callback({ success: true });
     } else {
       callback({ success: false, message: "Sala no encontrada" });
     }
@@ -82,29 +80,6 @@ io.on("connection", (socket) => {
         io.to(roomCode).emit("room_closed");
       }
     }
-  });
-
-  // Actualizar el PeerID del host
-  socket.on("update_peer_id", ({ roomCode, peerId }) => {
-    if (rooms[roomCode]?.host === socket.id) {
-      rooms[roomCode].peerId = peerId;
-      io.to(roomCode).emit("peer_id_updated", peerId);
-    }
-  });
-
-  // Notificación de llamada
-  socket.on("call_request", ({ roomCode, callerId }) => {
-    io.to(roomCode).emit("call_request", { callerId });
-  });
-
-  // Notificación de carga de PeerID
-  socket.on("peer_id_loading", ({ roomCode }) => {
-    io.to(roomCode).emit("peer_id_loading");
-  });
-
-  // Notificación de PeerID cargado
-  socket.on("peer_id_loaded", ({ roomCode }) => {
-    io.to(roomCode).emit("peer_id_loaded");
   });
 });
 
