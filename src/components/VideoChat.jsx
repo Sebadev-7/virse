@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Peer from "peerjs";
 import { Mic, MicOff, Video, VideoOff, Copy } from "lucide-react";
 
-const VideoChat = ({ isHost, isPlaying, videoUrl, setPeerId, remotePeerId }) => {
+const VideoChat = ({ isHost, isPlaying, videoUrl, setPeerId, remotePeerId, initiateCall }) => {
   const [peer, setPeer] = useState(null);
   const [myPeerId, setMyPeerId] = useState("");
   const [connectionStatus, setConnectionStatus] = useState("Iniciando...");
@@ -214,7 +214,7 @@ const VideoChat = ({ isHost, isPlaying, videoUrl, setPeerId, remotePeerId }) => 
               className="flex-1 px-3 py-2 bg-white/10 border border-white/10 text-white placeholder-white/50 rounded-xl focus:ring-2 focus:ring-purple-500 focus:outline-none backdrop-blur-sm text-xs"
             />
             <button
-              onClick={startCall}
+              onClick={initiateCall}
               className="w-full bg-purple-950 hover:bg-purple-500 text-white px-4 py-2 rounded-xl font-medium transition-all duration-300 shadow-lg hover:shadow-purple-500/25 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-900 text-xs"
             >
               Llamar

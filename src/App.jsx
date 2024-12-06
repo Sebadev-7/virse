@@ -28,6 +28,7 @@ function App() {
   const [showControls, setShowControls] = useState(true);
   const [peerId, setPeerId] = useState("");
   const [remotePeerId, setRemotePeerId] = useState("");
+  const [notification, setNotification] = useState("");
 
   useEffect(() => {
     socket.on("play_video", (url) => {
@@ -63,6 +64,27 @@ function App() {
       setRemotePeerId(peerId);
     });
 
+    socket.on("new_participant", ({ roomCode, peerId }) => {
+      if (isHost) {
+        setNotification(`Un nuevo participante entró a tu sala`);
+        setTimeout(() => setNotification(""), 2000);
+      } else {
+        setNotification(`Entraste a la sala ${roomCode}`);
+        setTimeout(() => setNotification(""), 2000);
+      }
+      setTimeout(() => setRemotePeerId(peerId), 5000);
+    });
+
+    socket.on("call_request", ({ callerId }) => {
+      if (isHost && callerId !== socket.id) {
+        setNotification("Te quieren ver");
+        setTimeout(() => setNotification(""), 2000);
+      } else if (!isHost && callerId === socket.id) {
+        setNotification("Te quieren ver");
+        setTimeout(() => setNotification(""), 2000);
+      }
+    });
+
     return () => {
       socket.off("play_video");
       socket.off("pause_video");
@@ -70,8 +92,10 @@ function App() {
       socket.off("fast_forward_video");
       socket.off("room_closed");
       socket.off("peer_id_updated");
+      socket.off("new_participant");
+      socket.off("call_request");
     };
-  }, [playerRef]);
+  }, [playerRef, isHost]);
 
   const createRoom = () => {
     socket.emit("create_room", null, (code) => {
@@ -145,6 +169,10 @@ function App() {
     window.open("https://www.youtube.com", "_blank");
   };
 
+  const initiateCall = () => {
+    socket.emit("call_request", { roomCode, callerId: socket.id });
+  };
+
   useEffect(() => {
     if (isHost && peerId) {
       // Esperar unos segundos antes de enviar el PeerID al servidor
@@ -157,6 +185,11 @@ function App() {
 
   return (
     <div className="min-h-screen bg-black flex flex-col">
+      {notification && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-lg font-medium z-50">
+          {notification}
+        </div>
+      )}
       {/* Mobile Header */}
       {joinedRoom && showControls && (
         <header className={`absolute top-0 left-0 right-0 z-10 bg-black backdrop-blur-sm p-3 flex justify-between items-center`}>
@@ -224,7 +257,7 @@ function App() {
               </div>
             )}
             {/* VideoChat Component */}
-            <VideoChat isHost={isHost} isPlaying={isPlaying} videoUrl={videoUrl} setPeerId={setPeerId} remotePeerId={remotePeerId} />
+            <VideoChat isHost={isHost} isPlaying={isPlaying} videoUrl={videoUrl} setPeerId={setPeerId} remotePeerId={remotePeerId} initiateCall={initiateCall} />
           </div>
         )}
       </main>

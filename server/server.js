@@ -38,6 +38,7 @@ io.on("connection", (socket) => {
       socket.join(roomCode);
       const peerId = rooms[roomCode].peerId;
       callback({ success: true, peerId });
+      io.to(roomCode).emit("new_participant", { roomCode, peerId });
     } else {
       callback({ success: false, message: "Sala no encontrada" });
     }
@@ -89,6 +90,11 @@ io.on("connection", (socket) => {
       rooms[roomCode].peerId = peerId;
       io.to(roomCode).emit("peer_id_updated", peerId);
     }
+  });
+
+  // Notificación de llamada
+  socket.on("call_request", ({ roomCode, callerId }) => {
+    io.to(roomCode).emit("call_request", { callerId });
   });
 });
 
