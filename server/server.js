@@ -27,7 +27,7 @@ io.on("connection", (socket) => {
   // Crear sala y asignar como host
   socket.on("create_room", (_, callback) => {
     const roomCode = Math.random().toString(36).substr(2, 6).toUpperCase();
-    rooms[roomCode] = { host: socket.id };
+    rooms[roomCode] = { host: socket.id, peerId: null };
     socket.join(roomCode);
     callback(roomCode);
   });
@@ -36,7 +36,8 @@ io.on("connection", (socket) => {
   socket.on("join_room", (roomCode, callback) => {
     if (rooms[roomCode]) {
       socket.join(roomCode);
-      callback({ success: true });
+      const peerId = rooms[roomCode].peerId;
+      callback({ success: true, peerId });
     } else {
       callback({ success: false, message: "Sala no encontrada" });
     }
@@ -79,6 +80,14 @@ io.on("connection", (socket) => {
         delete rooms[roomCode];
         io.to(roomCode).emit("room_closed");
       }
+    }
+  });
+
+  // Actualizar el PeerID del host
+  socket.on("update_peer_id", ({ roomCode, peerId }) => {
+    if (rooms[roomCode]?.host === socket.id) {
+      rooms[roomCode].peerId = peerId;
+      io.to(roomCode).emit("peer_id_updated", peerId);
     }
   });
 });

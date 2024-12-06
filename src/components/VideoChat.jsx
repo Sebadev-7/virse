@@ -2,10 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import Peer from "peerjs";
 import { Mic, MicOff, Video, VideoOff, Copy } from "lucide-react";
 
-const VideoChat = ({ isHost, isPlaying, videoUrl }) => {
+const VideoChat = ({ isHost, isPlaying, videoUrl, setPeerId, remotePeerId }) => {
   const [peer, setPeer] = useState(null);
   const [myPeerId, setMyPeerId] = useState("");
-  const [remotePeerId, setRemotePeerId] = useState("");
   const [connectionStatus, setConnectionStatus] = useState("Iniciando...");
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
   const [isVideoEnabled, setIsVideoEnabled] = useState(false);
@@ -33,6 +32,7 @@ const VideoChat = ({ isHost, isPlaying, videoUrl }) => {
       peerInstance.on("open", (id) => {
         setMyPeerId(id);
         setConnectionStatus("Listo para conectar");
+        setPeerId(id); // Set the peer ID in the parent component
       });
 
       peerInstance.on("error", (err) => {
@@ -53,7 +53,7 @@ const VideoChat = ({ isHost, isPlaying, videoUrl }) => {
       }
       peerInstance.destroy();
     };
-  }, []);
+  }, [setPeerId]);
 
   const getMediaStream = async (withVideo = false) => {
     try {
@@ -113,11 +113,6 @@ const VideoChat = ({ isHost, isPlaying, videoUrl }) => {
   };
 
   const startCall = async () => {
-    if (!remotePeerId) {
-      setError("Por favor, ingresa el ID del otro usuario");
-      return;
-    }
-
     try {
       setConnectionStatus("Iniciando llamada...");
       const stream = await getMediaStream(isVideoEnabled);
@@ -191,13 +186,13 @@ const VideoChat = ({ isHost, isPlaying, videoUrl }) => {
           <div className="flex flex-col items-start gap-2">
             <p className="text-sm font-medium text-white/90">{connectionStatus}</p>
             <div className="flex items-center space-x-2 bg-white/5 rounded-xl px-3 py-1">
-              <p className="text-xs text-white/80">Tu ID: {myPeerId}</p>
+              <p className="text-xs text-white/80 peer-id">Tu ID: {myPeerId}</p>
               <button
                 onClick={copyMyId}
                 className="p-1 hover:bg-white/10 rounded-lg transition-all duration-300"
                 title="Copiar ID"
               >
-                <Copy size={14} className="text-white/80 hover:text-white" />
+                <Copy size={20} className="text-white/80 hover:text-white" />
               </button>
             </div>
           </div>
@@ -235,7 +230,7 @@ const VideoChat = ({ isHost, isPlaying, videoUrl }) => {
                   : "bg-red-600 hover:bg-red-500 hover:shadow-red-500/25"
               } text-white focus:ring-2 focus:ring-offset-2 focus:ring-offset-purple-900`}
             >
-              {isAudioEnabled ? <Mic size={16} /> : <MicOff size={16} />}
+              {isAudioEnabled ? <Mic size={24} /> : <MicOff size={24} />}
             </button>
             <button
               onClick={toggleVideo}
@@ -245,7 +240,7 @@ const VideoChat = ({ isHost, isPlaying, videoUrl }) => {
                   : "bg-red-700 hover:bg-red-500 hover:shadow-red-500/25"
               } text-white focus:ring-2 focus:ring-offset-2 focus:ring-offset-purple-900`}
             >
-              {isVideoEnabled ? <Video size={16} /> : <VideoOff size={16} />}
+              {isVideoEnabled ? <Video size={24} /> : <VideoOff size={24} />}
             </button>
           </div>
         </div>
@@ -277,7 +272,7 @@ const VideoChat = ({ isHost, isPlaying, videoUrl }) => {
 
       {/* Videos flotantes */}
       <div className="fixed top-14 right-3 flex flex-col space-y-1">
-        <div className="relative group rounded-full overflow-hidden shadow-2xl ring-1 ring-white/10 w-16 h-16">
+        <div className="relative group rounded-full overflow-hidden shadow-2xl ring-1 ring-white/10 w-16 h-16 border border-white">
           <video
             ref={localVideoRef}
             autoPlay
@@ -289,12 +284,12 @@ const VideoChat = ({ isHost, isPlaying, videoUrl }) => {
         <div className="flex justify-center">
           <div className="bg-black/50 backdrop-blur-sm text-white px-2 py-1 rounded-xl flex items-center space-x-1">
             <span className="font-medium text-xs">Tú</span>
-            {!isAudioEnabled && <MicOff size={12} className="text-red-400" />}
-            {!isVideoEnabled && <VideoOff size={12} className="text-red-400" />}
+            {!isAudioEnabled && <MicOff size={16} className="text-red-400" />}
+            {!isVideoEnabled && <VideoOff size={16} className="text-red-400" />}
           </div>
         </div>
 
-        <div className="relative group rounded-full overflow-hidden shadow-2xl ring-1 ring-white/10 w-16 h-16">
+        <div className="relative group rounded-full overflow-hidden shadow-2xl ring-1 ring-white/10 w-16 h-16 border border-white">
           <video
             ref={remoteVideoRef}
             autoPlay

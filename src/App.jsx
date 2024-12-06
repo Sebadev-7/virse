@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import ReactPlayer from "react-player";
 import {
@@ -7,7 +7,9 @@ import {
   Rewind,
   FastForward,
   Copy,
-  Tv
+  Tv,
+  Trash,
+  Youtube
 } from "lucide-react";
 import VideoChat from "./components/VideoChat"; // Importa el componente VideoChat
 
@@ -24,6 +26,8 @@ function App() {
   const [playerRef, setPlayerRef] = useState(null);
   const [copied, setCopied] = useState(false);
   const [showControls, setShowControls] = useState(true);
+  const [peerId, setPeerId] = useState("");
+  const [remotePeerId, setRemotePeerId] = useState("");
 
   useEffect(() => {
     socket.on("play_video", (url) => {
@@ -55,12 +59,17 @@ function App() {
       setIsHost(false);
     });
 
+    socket.on("peer_id_updated", (peerId) => {
+      setRemotePeerId(peerId);
+    });
+
     return () => {
       socket.off("play_video");
       socket.off("pause_video");
       socket.off("rewind_video");
       socket.off("fast_forward_video");
       socket.off("room_closed");
+      socket.off("peer_id_updated");
     };
   }, [playerRef]);
 
@@ -73,9 +82,15 @@ function App() {
   };
 
   const joinRoom = () => {
-    socket.emit("join_room", roomCode, ({ success, message }) => {
-      if (success) setJoinedRoom(true);
-      else alert(message);
+    socket.emit("join_room", roomCode, ({ success, peerId, message }) => {
+      if (success) {
+        setJoinedRoom(true);
+        if (peerId) {
+          setRemotePeerId(peerId);
+        }
+      } else {
+        alert(message);
+      }
     });
   };
 
@@ -113,7 +128,7 @@ function App() {
   };
 
   const copyRoomCode = () => {
-    navigator.clipboard.writeText(roomCode);
+    navigator.clipboard.writeText(`${roomCode}\n${peerId}`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -122,13 +137,31 @@ function App() {
     setShowControls(!showControls);
   };
 
+  const clearVideoUrl = () => {
+    setVideoUrl("");
+  };
+
+  const openYoutube = () => {
+    window.open("https://www.youtube.com", "_blank");
+  };
+
+  useEffect(() => {
+    if (isHost && peerId) {
+      // Esperar unos segundos antes de enviar el PeerID al servidor
+      const timeout = setTimeout(() => {
+        socket.emit("update_peer_id", { roomCode, peerId });
+      }, 5000); // Esperar 5 segundos
+      return () => clearTimeout(timeout);
+    }
+  }, [isHost, peerId]);
+
   return (
     <div className="min-h-screen bg-black flex flex-col">
       {/* Mobile Header */}
       {joinedRoom && showControls && (
         <header className={`absolute top-0 left-0 right-0 z-10 bg-black backdrop-blur-sm p-3 flex justify-between items-center`}>
-          <div className="text-xs text-[#94A3B8] font-medium flex items-center">
-            <Tv className="w-4 h-4 mr-2 text-[#38BDF8]" />
+          <div className="text-lg text-[#94A3B8] font-medium flex items-center">
+            <Tv className="w-6 h-6 mr-2 text-[#38BDF8]" />
             Dodi
           </div>
           <div className="flex items-center space-x-2">
@@ -142,7 +175,7 @@ function App() {
               {copied ? (
                 <span className="text-xs text-[#10B981]">Copiado!</span>
               ) : (
-                <Copy className="w-4 h-4" />
+                <Copy className="w-6 h-6" />
               )}
             </button>
           </div>
@@ -191,7 +224,7 @@ function App() {
               </div>
             )}
             {/* VideoChat Component */}
-            <VideoChat isHost={isHost} isPlaying={isPlaying} videoUrl={videoUrl} />
+            <VideoChat isHost={isHost} isPlaying={isPlaying} videoUrl={videoUrl} setPeerId={setPeerId} remotePeerId={remotePeerId} />
           </div>
         )}
       </main>
@@ -201,13 +234,21 @@ function App() {
         <footer className={`absolute bottom-0 left-0 right-0 bg-black backdrop-blur-sm p-4`}>
           {isHost && (
             <div className="px-4 mb-4">
-              <input
-                type="text"
-                placeholder="URL del video de YouTube"
-                value={videoUrl}
-                onChange={(e) => setVideoUrl(e.target.value)}
-                className="w-full px-4 py-2 bg-[#1E293B] border-[#334155] text-[#E2E8F0] border rounded-lg focus:ring-2 focus:ring-[#38BDF8] transition"
-              />
+              <div className="flex items-center space-x-2">
+                <button onClick={clearVideoUrl} className="text-[#38BDF8] hover:text-[#7DD3FC] transition-colors">
+                  <Trash className="w-6 h-6" />
+                </button>
+                <input
+                  type="text"
+                  placeholder="URL del video de YouTube"
+                  value={videoUrl}
+                  onChange={(e) => setVideoUrl(e.target.value)}
+                  className="flex-grow px-4 py-2 bg-[#1E293B] border-[#334155] text-[#E2E8F0] border rounded-lg focus:ring-2 focus:ring-[#38BDF8] transition"
+                />
+                <button onClick={openYoutube} className="text-[#38BDF8] hover:text-[#7DD3FC] transition-colors">
+                  <Youtube className="w-6 h-6" />
+                </button>
+              </div>
               <button
                 onClick={playVideo}
                 className="mt-2 w-full bg-blue-950 text-white py-3 rounded-lg hover:from-[#5B21B6] hover:to-[#4338CA] transition"
